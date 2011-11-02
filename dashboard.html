@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Build Dashboard</title>
+				<script src="jquery.min.js"></script>
+				<script>
+				var ci_url = "http://deadlock.netbeans.org/hudson/api/json";
+				var jobs_to_be_filtered = ["apitest", "ergonomics"]
+				//for alljobs
+				jobs_to_be_filtered = []
+				</script>
+				<style>
+        body {
+          padding: 10px;
+          margin: 20px;
+          font: bold 3.1em Helvetica, Arial, sans-serif;
+          background-color: #FFF;
+        }
+
+        section, header, footer, aside, nav, article, figure {
+          display: block;
+        }
+
+        article {
+            color: #FFF;
+						background-color: gray;
+            float: left;
+						padding: 40px;
+            margin: 40px;
+            -moz-box-shadow: 5px 5px 5px #333333;
+            -webkit-box-shadow: 5px 5px 11px #333333;
+            -o-box-shadow: 5px 5px 11px #333333;
+            -ms-box-shadow: 5px 5px 11px #333333;
+            box-shadow: 5px 5px 11px #333333;
+            border-radius: 15px;
+						font-size: 2em;
+        }
+					
+				.disabled, .aborted{
+					
+				}
+				
+        .blue {
+            background:#749a02;
+            -webkit-animation: greenPulse 4s infinite;
+        }
+
+        .blue_anime, .red_anime, .yellow_anime {
+            background: #3861b6;
+        }
+        .red{
+            background: #a01208;
+        }
+				.time{
+					font-size:1.5em;
+					background: none;
+					color: black;
+					box-shadow: none;
+				}
+				
+				.job_disabled_or_aborted {
+            -webkit-transform: rotate(20deg);
+            position: absolute;
+            color: DarkRed;
+            border: 10px dashed black;
+            margin: 0;
+            padding: 10px;
+            font-size: 2.5em;
+        }
+				.workon{
+					opacity:.8;
+				}
+		    @-webkit-keyframes greenPulse {
+				  from { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333;   -webkit-box-shadow: 5px 5px 11px #333333;}
+				  50% { background-color: #91bd09; -webkit-box-shadow: 0 0 18px #91bd09;  -webkit-box-shadow: 15px 15px 32px #333333; }
+				  to { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333;   -webkit-box-shadow: 5px 5px 11px #333333;}
+				}
+		    
+        </style>
+			
+
+
+  </head>
+<body>
+   <div id="content"></div>
+</body>
+<script>
+var dashboardLastUpdatedTime = new Date(); 
+//object literal
+var jenkinsDashboard = {
+	addTimestampToBuild : function(elements){
+		elements.each(function() {
+		    var worker = $(this).attr("class");
+		    var y = parseInt($(this).offset().top + $(this).height() / 2);
+		    var x = parseInt($(this).offset().left + $(this).width() / 2);
+		    var id = x + "-" + y;
+		    var html = '<div class="job_disabled_or_aborted" id="' + id + '">' + worker + '</div>';
+		    $("#content").append(html);
+		    var new_element = $("#" + id);
+		    new_element.css("top", parseInt(y - new_element.height() / 2)).css("left", parseInt(x - new_element.width() / 2));
+				new_element.addClass('rotate');
+				$(this).addClass('workon');
+		});
+	},
+	composeHtmlFragement: function(jobs){
+		var fragment = document.createDocumentFragment();
+		var fragment = "<section>";
+		$.each(jobs, function(){
+			if(jobs_to_be_filtered.length ==0 || $.inArray(this.name, jobs_to_be_filtered) != -1){
+				fragment += ("<article class=" + this.color + "><head>" + this.name + "</head></article>");
+			}
+		});
+		dashboardLastUpdatedTime = new Date();
+		fragment +="<article class='time'>" + dashboardLastUpdatedTime.toString('dd, MMMM ,yyyy')  + "</article></section>";
+		$("#content").html(fragment);
+	},
+	updateBuildStatus : function(data) {
+		jenkinsDashboard.composeHtmlFragement(data.jobs);
+		jenkinsDashboard.addTimestampToBuild($(".disabled, .aborted"));		
+	}
+}
+$(document).ready(function(){	
+	var auto_refresh = setInterval(function(){
+		$.getJSON( ci_url + "?format=json&jsonp=?", jenkinsDashboard.updateBuildStatus);  
+	}, 4000);
+})
+</script>
+</html>
