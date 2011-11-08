@@ -5,10 +5,11 @@
         <title>Build Dashboard</title>
 				<script src="jquery.min.js"></script>
 				<script>
-				var ci_url = "http://deadlock.netbeans.org/hudson/api/json";
-				var jobs_to_be_filtered = ["apitest", "ergonomics"]
+				//the ci address()
+				var ci_url = "http://deadlock.netbeans.org/hudson/";
+				var jobs_to_be_filtered = ["apitest", "ergonomics"];
 				//for alljobs
-				jobs_to_be_filtered = []
+				jobs_to_be_filtered = [];
 				</script>
 				<style>
         body {
@@ -37,9 +38,9 @@
 						font-size: 2em;
         }
 					
-				.disabled, .aborted{
+		.disabled, .aborted{
 					
-				}
+		}
 				
         .blue {
             background:#749a02;
@@ -52,30 +53,30 @@
         .red{
             background: #a01208;
         }
-				.time{
-					font-size:1.5em;
-					background: none;
-					color: black;
-					box-shadow: none;
-				}
-				
-				.job_disabled_or_aborted {
-            -webkit-transform: rotate(20deg);
-            position: absolute;
-            color: DarkRed;
-            border: 10px dashed black;
-            margin: 0;
-            padding: 10px;
-            font-size: 2.5em;
-        }
-				.workon{
-					opacity:.8;
-				}
-		    @-webkit-keyframes greenPulse {
-				  from { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333;   -webkit-box-shadow: 5px 5px 11px #333333;}
-				  50% { background-color: #91bd09; -webkit-box-shadow: 0 0 18px #91bd09;  -webkit-box-shadow: 15px 15px 32px #333333; }
-				  to { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333;   -webkit-box-shadow: 5px 5px 11px #333333;}
-				}
+		.time{
+			font-size:1.5em;
+			background: none;
+			color: black;
+			box-shadow: none;
+		}
+
+		.job_disabled_or_aborted {
+			-webkit-transform: rotate(20deg);
+			position: absolute;
+			color: DarkRed;
+			border: 10px dashed black;
+			margin: 0;
+			padding: 10px;
+			font-size: 2.5em;
+		}
+		.workon{
+			opacity:.8;
+		}
+		@-webkit-keyframes greenPulse {
+			from { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333;   -webkit-box-shadow: 5px 5px 11px #333333;}
+			50% { background-color: #91bd09; -webkit-box-shadow: 0 0 18px #91bd09;  -webkit-box-shadow: 15px 15px 32px #333333; }
+			to { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333;   -webkit-box-shadow: 5px 5px 11px #333333;}
+		}
 		    
         </style>
 			
@@ -99,9 +100,12 @@ var jenkinsDashboard = {
 		    $("#content").append(html);
 		    var new_element = $("#" + id);
 		    new_element.css("top", parseInt(y - new_element.height() / 2)).css("left", parseInt(x - new_element.width() / 2));
-				new_element.addClass('rotate');
-				$(this).addClass('workon');
+			new_element.addClass('rotate');
+			$(this).addClass('workon');
 		});
+	},
+	customizeDisplayJobName : function (job_name) {
+
 	},
 	composeHtmlFragement: function(jobs){
 		var fragment = document.createDocumentFragment();
@@ -121,6 +125,7 @@ var jenkinsDashboard = {
 	}
 }
 $(document).ready(function(){	
+	ci_url = ci_url + "/api/json";
 	var auto_refresh = setInterval(function(){
 		$.getJSON( ci_url + "?format=json&jsonp=?", jenkinsDashboard.updateBuildStatus);  
 	}, 4000);
