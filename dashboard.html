@@ -3,15 +3,18 @@
     <head>
         <meta charset="utf-8" />
         <title>Build Dashboard</title>
-				<script src="jquery.min.js"></script>
-				<script>
-				//the ci address()
-				var ci_url = "http://deadlock.netbeans.org/hudson/";
-				var jobs_to_be_filtered = ["apitest", "ergonomics"];
-				//for alljobs
-				jobs_to_be_filtered = [];
-				</script>
-				<style>
+		<script src="jquery.min.js"></script>
+		<script type="text/javascript" src="jquery.jsonp-2.1.4.min.js"></script>
+		<script type="text/javascript" src="jquery.blockUI.js"></script>
+		<script>
+			//the ci address()
+			var ci_url = "http://10.112.121.179:8083/";
+			ci_url = "http://ci.jruby.org/view/Ruboto";
+			var jobs_to_be_filtered = ["apitest", "ergonomics"];
+			//for all jobs for empty
+			jobs_to_be_filtered = [];
+		</script>
+		<style>
         body {
           padding: 10px;
           margin: 20px;
@@ -47,8 +50,12 @@
             -webkit-animation: greenPulse 4s infinite;
         }
 
-        .blue_anime, .red_anime, .yellow_anime {
+        .blue_anime, .red_anime, .yellow_anime, .aborted_anime {
             background: #3861b6;
+        }
+        .yellow {
+        	color: black;
+        	background: yellow;
         }
         .red{
             background: #a01208;
@@ -79,12 +86,11 @@
 		}
 		    
         </style>
-			
-
-
   </head>
 <body>
-   <div id="content"></div>
+   <div id="content">
+   	<h2>Highly recommend you use Safari or Google Chrome....</h2>
+   </div>
 </body>
 <script>
 var dashboardLastUpdatedTime = new Date(); 
@@ -103,9 +109,6 @@ var jenkinsDashboard = {
 			new_element.addClass('rotate');
 			$(this).addClass('workon');
 		});
-	},
-	customizeDisplayJobName : function (job_name) {
-
 	},
 	composeHtmlFragement: function(jobs){
 		var fragment = document.createDocumentFragment();
@@ -126,8 +129,30 @@ var jenkinsDashboard = {
 }
 $(document).ready(function(){	
 	ci_url = ci_url + "/api/json";
+	var counter = 0;
 	var auto_refresh = setInterval(function(){
-		$.getJSON( ci_url + "?format=json&jsonp=?", jenkinsDashboard.updateBuildStatus);  
+	 counter++;
+	 $.jsonp({
+	        url: ci_url + "?format=json&jsonp=?",
+	        dataType: "jsonp",
+	        // callbackParameter: "jsonp",
+	        timeout: 10000,
+	        beforeSend: function(xhr) {
+	        	if(counter == 1){
+	        		$.blockUI({ message: '<h1 id="loading"><img src="busy.gif" />loading.....</h1>' });
+	        	};  	
+	        },
+	        success: function(data, status){
+	        	$.unblockUI();
+	        	jenkinsDashboard.updateBuildStatus(data);
+	        },
+	        error: function(XHR, textStatus, errorThrown){
+	        	if($("#error_loading").length <= 0){
+	        		$.blockUI({message: '<h1 id="error_loading"> Ooooops, check out your network etc. Retrying........</h1>'});	
+	        	}
+	        }
+	    });
+
 	}, 4000);
 })
 </script>
