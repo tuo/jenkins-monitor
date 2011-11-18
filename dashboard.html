@@ -12,6 +12,7 @@
 			var jobs_to_be_filtered = ["apitest", "ergonomics"];
 			//for all jobs for empty
 			jobs_to_be_filtered = [];
+			var jobs_to_be_excluded = ["some-job"];
 		</script>
 		<style>
        body {
@@ -40,9 +41,9 @@
 					font-size: 2em;
        }
 				
-	.disabled, .aborted{
-				
-	}
+		.disabled, .aborted{
+			
+		}
 			
     .blue {
         background:#749a02;
@@ -116,7 +117,7 @@ var jenkinsDashboard = {
 		var fragment = document.createDocumentFragment();
 		var fragment = "<section>";
 		$.each(jobs, function(){
-			if(jobs_to_be_filtered.length ==0 || $.inArray(this.name, jobs_to_be_filtered) != -1){
+			if((jobs_to_be_filtered.length ==0 || $.inArray(this.name, jobs_to_be_filtered) != -1) && ($.inArray(this.name, jobs_to_be_excluded) == -1)){
 				fragment += ("<article class=" + this.color + "><head>" + this.name + "</head></article>");
 			}
 		});
