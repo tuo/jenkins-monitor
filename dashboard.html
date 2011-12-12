@@ -85,10 +85,18 @@
 		50% { background-color: #91bd09; -webkit-box-shadow: 0 0 18px #91bd09;  -webkit-box-shadow: 15px 15px 32px #333333; }
 		to { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333;   -webkit-box-shadow: 5px 5px 11px #333333;}
 	}
-	    
+	#sound{
+	  margin: auto;
+	  position: absolute;
+	  top: 0;
+	  right: 0;
+	  bottom: 0;
+	  left: 0;
+	}
         </style>
   </head>
 <body>
+   <audio name="sound" id="sound" src="http://translate.google.com/translate_tts?q=Hello&tl=en"></audio>
    <div id="content">
    	<h2>Jenkins Monitor</h2>
 		<cite>kanban for radiate ci status</cite>
@@ -130,6 +138,21 @@ var jenkinsDashboard = {
 		jenkinsDashboard.addTimestampToBuild($(".disabled, .aborted"));		
 	}
 }
+function soundForCI(data,lastData){
+	if(lastData != null){
+	  $(data.jobs).each(function(index){
+		if(lastData.jobs[index].color == 'blue_anime' && this.color == 'red'){
+		  $("#sound")[0].src='http://translate.google.com/translate_tts?q=build+'+this.name+'+faild&tl=en';
+		  $("#sound")[0].play();
+		}
+		if(lastData.jobs[index].color == 'blue_anime' && this.color == 'blue'){
+		  $("#sound")[0].src='http://translate.google.com/translate_tts?q=build+'+this.name+'+pass&tl=en';
+		  $("#sound")[0].play();
+		}
+	  });
+	}
+	return data;
+}
 $(document).ready(function(){	
 	ci_url = ci_url + "/api/json";
 	var counter = 0;
@@ -147,6 +170,7 @@ $(document).ready(function(){
 	        },
 	        success: function(data, status){
 	        	$.unblockUI();
+	        	lastData=soundForCI(data,lastData);
 	        	jenkinsDashboard.updateBuildStatus(data);
 	        },
 	        error: function(XHR, textStatus, errorThrown){
