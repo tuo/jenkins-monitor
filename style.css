@@ -1,0 +1,78 @@
+   body {
+     padding: 10px;
+     margin: 20px;
+     font: bold 3.1em Helvetica, Arial, sans-serif;
+     background-color: #FFF;
+   }
+
+   section, header, footer, aside, nav, article, figure {
+     display: block;
+   }
+
+   article {
+       color: #FFF;
+				background-color: gray;
+       float: left;
+				padding: 40px;
+       margin: 20px;
+       -moz-box-shadow: 5px 5px 5px #333333;
+       -webkit-box-shadow: 5px 5px 11px #333333;
+       -o-box-shadow: 5px 5px 11px #333333;
+       -ms-box-shadow: 5px 5px 11px #333333;
+       box-shadow: 5px 5px 11px #333333;
+       border-radius: 15px;
+				font-size: 2em;
+   }
+			
+	.disabled, .aborted{
+		
+	}
+		
+.blue {
+    background:#749a02;
+    -webkit-animation: greenPulse 4s infinite;
+}
+
+.blue_anime, .red_anime, .yellow_anime, .aborted_anime {
+    background: #3861b6;
+}
+.yellow {
+	color: black;
+	background: yellow;
+}
+.red{
+    background: #a01208;
+}
+.time{
+	font-size:1.5em;
+	background: none;
+	color: black;
+	box-shadow: none;
+}
+
+.job_disabled_or_aborted {
+	-webkit-transform: rotate(20deg);
+	-moz-transform: rotate(20deg);
+	position: absolute;
+	color: DarkRed;
+	border: 10px dashed black;
+	margin: 0;
+	padding: 10px;
+	font-size: 2.5em;
+}
+.workon{
+	opacity:.8;
+}
+@-webkit-keyframes greenPulse {
+	from { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333;   -webkit-box-shadow: 5px 5px 11px #333333;}
+	50% { background-color: #91bd09; -webkit-box-shadow: 0 0 18px #91bd09;  -webkit-box-shadow: 15px 15px 32px #333333; }
+	to { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333;   -webkit-box-shadow: 5px 5px 11px #333333;}
+}
+#sound{
+  margin: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

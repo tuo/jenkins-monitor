@@ -18,7 +18,7 @@ How to Use
     git clone git://github.com/tuo/jenkins-monitor.git
 
 
-  Then open dashboard.html to change your jenkins ci address and jobs name you want to show on dashboard like following:
+  Then open config.js to change your jenkins ci address and jobs name you want to show on dashboard like following:
 	
 		var ci_url = "http://ci.jruby.org/view/Ruboto";
 		var jobs_to_be_filtered = ["apitest", "ergonomics"];
