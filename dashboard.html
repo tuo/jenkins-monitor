@@ -3,34 +3,48 @@
     <head>
         <meta charset="utf-8" />
         <title>Build Dashboard</title>
-		<script src="jquery.min.js"></script>
-		<script type="text/javascript" src="jquery.jsonp-2.1.4.min.js"></script>
-    <script type="text/javascript" src="jquery.blockUI.js"></script>
-    <script type="text/javascript" src="jquery.blockUI.js"></script>
-    <script type="text/javascript" src="config.js"></script>
-    <script type="text/javascript" src="jenkinsDashboard.js"></script>
-		<link rel="stylesheet" type="text/css" href="style.css" />
+		    <script type="text/javascript" src="js/jquery.min.js"></script>
+    		<script type="text/javascript" src="js/jquery.jsonp-2.1.4.min.js"></script>
+        <script type="text/javascript" src="js/jquery.blockUI.js"></script>
+        <script type="text/javascript" src="js/jenkinsDashboard.js"></script>
+        <script type="text/javascript" src="conf/config.js.sample"></script>
+        <script type="text/javascript" src="conf/config.js"></script>
+    		<link rel="stylesheet" type="text/css" href="css/style.css" />
   </head>
 <body>
-   <audio name="sound" id="sound" src="http://translate.google.com/translate_tts?q=Hello&tl=en"></audio>
-   <div id="content">
-   	<h2>Jenkins Monitor</h2>
-		<cite>kanban for radiate ci status</cite>
-		<h5>Better using Safari or Google Chrome</h5>
-   </div>
+    <audio name="sound" id="sound"></audio>
+    <div id="content">
+       	<h2>Jenkins Monitor</h2>
+    		<cite>kanban for radiate ci status</cite>
+    		<h5>Better using Safari or Google Chrome</h5>
+    </div>
 </body>
 <script>
 var dashboardLastUpdatedTime = new Date(); 
+
+var sounds = new Array();
+var soundQueue = {
+	add : function(sound_url){
+	  sounds.push(sound_url)
+	},
+	play : function() {
+	  if(sounds.length > 0){
+	    var soundPlayer = $("#sound")[0];
+	    if(soundPlayer.paused){
+	      soundPlayer.src=sounds.shift();
+		    soundPlayer.play();
+		  }
+	  }
+	}
+}
 function soundForCI(data,lastData){
 	if(lastData != null){
 	  $(data.jobs).each(function(index){
 		if(lastData.jobs[index].color == 'blue_anime' && this.color == 'red'){
-		  $("#sound")[0].src='http://translate.google.com/translate_tts?q=build+'+this.name+'+faild&tl=en';
-		  $("#sound")[0].play();
+		  soundQueue.add('http://translate.google.com/translate_tts?q=build+'+this.name+'+faild&tl=en');
 		}
-		if(lastData.jobs[index].color == 'blue_anime' && this.color == 'blue'){
-		  $("#sound")[0].src='http://translate.google.com/translate_tts?q=build+'+this.name+'+pass&tl=en';
-		  $("#sound")[0].play();
+		if(lastData.jobs[index].color == 'blue' && this.color == 'blue'){
+		  soundQueue.add('sounds/build_fail_super_mario.mp3');
 		}
 	  });
 	}
@@ -49,7 +63,7 @@ $(document).ready(function(){
 	        timeout: 10000,
 	        beforeSend: function(xhr) {
 	        	if(counter == 1){
-	        		$.blockUI({ message: '<h1 id="loading"><img src="busy.gif" />loading.....</h1>' });
+	        		$.blockUI({ message: '<h1 id="loading"><img src="img/busy.gif" />loading.....</h1>' });
 	        	};  	
 	        },
 	        success: function(data, status){
@@ -63,7 +77,7 @@ $(document).ready(function(){
 	        	}
 	        }
 	    });
-
+  soundQueue.play();
 	}, 4000);
 })
 </script>
