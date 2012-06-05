@@ -40,12 +40,14 @@ var soundQueue = {
 function soundForCI(data,lastData){
 	if(lastData != null){
 	  $(data.jobs).each(function(index){
+            if (lastData.jobs[index] != undefined) {
 		if(lastData.jobs[index].color == 'blue_anime' && this.color == 'red'){
 		  soundQueue.add('http://translate.google.com/translate_tts?q=build+'+this.name+'+faild&tl=en');
 		}
 		if(lastData.jobs[index].color == 'blue' && this.color == 'blue'){
 		  soundQueue.add('sounds/build_fail_super_mario.mp3');
 		}
+            }
 	  });
 	}
 	return data;
