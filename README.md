@@ -34,7 +34,7 @@ How to Use
 
   Then run from command line: 
 
-		open dashboard.html -a safari
+		open index.html -a safari
 		
 
 Contribute
