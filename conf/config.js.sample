@@ -1,5 +1,10 @@
-var config = {
-	ci_url: 'http://ci.jruby.org/view/Ruboto',
+var config = [{
+	ci_url: 'https://ci.openquake.org/',
 	jobs_to_be_filtered: [],
 	jobs_to_be_excluded: []
-}
+},
+{
+	ci_url: 'https://ci.opensuse.org/',
+	jobs_to_be_filtered: [],
+	jobs_to_be_excluded: []
+}]
