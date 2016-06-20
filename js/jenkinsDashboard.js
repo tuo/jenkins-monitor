@@ -72,13 +72,13 @@ $(document).ready(function () {
 
     var ci_url = config.ci_url + "/api/json",
         counter = 0,
-        lastData = null,
-        auto_refresh = setInterval(function () {
+        lastData = null;
+
+    var auto_refresh = setInterval(function () {
             counter++;
-            $.jsonp({
-                url: ci_url + "?format=json&jsonp=?",
-                dataType: "jsonp",
-                // callbackParameter: "jsonp",
+            $.ajax({
+                url: ci_url,
+                dataType: "json",
                 timeout: 10000,
                 beforeSend: function (xhr) {
                     if (counter === 1) {
